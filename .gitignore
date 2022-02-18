@@ -1,0 +1,14 @@
+dist/
+node_modules/
+out/
+.cache/
+
+neardev/shared-test/*
+!neardev/shared-test/test.near.json
+
+neardev/default/*
+neardev/dev-account*
+
+yarn-error.log
+
+src
