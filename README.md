@@ -1,4 +1,4 @@
-# Signear
+# Fírmamelo
 
 dApp para cargar un documento que se debe firmar por varias partes.
 
@@ -18,6 +18,55 @@ El objetivo de la dApp es desplegar un SmartContract que solicite la firma de ca
 
 ## Comandos útiles
 
+### Interactuar con el Smart Contract
+
+```bash
+# Despliega el contrato en desarrollo y setea la
+# cuenta autogenerada por el cli: 'Account id: dev-xxx-xxx'
+yarn dev-deploy && export CONTRACT=$(cat neardev/dev-account)
+
+# En otra terminal, monitorear storage usando near-account-utils
+watch -d -n 1 yarn storage $CONTRACT
+
+# Documento no encontrado
+near view $CONTRACT getDocument '{"hash":"121234"}'
+
+# Crear documento para firmas.
+# Cada documento requiere 0.1 Near para ingresarlo
+near call $CONTRACT createDocument \
+  "{ \
+    \"md5\":\"121234\", \
+    \"title\":\"Contrato de arrendamiento\", \
+    \"dateLimit\":\"2022-02-20 23:00:00\", \
+    \"signers\":[\"aurex.testnet\",\"$CONTRACT\"] \
+  }" \
+  --account-id $CONTRACT \
+  --amount .1
+
+# Guardar el hash generado del documento
+HASHDOC=xxxxxxxxxxxx
+
+# Muestra el documento recién ingresado
+near view $CONTRACT getDocument "{\"hash\":\"$HASHDOC\"}"
+
+# Firmar con mi cuenta en $CONTRACT
+near call $CONTRACT addSign "{\"hash\":\"$HASHDOC\"}" --account-id $CONTRACT
+
+# Verificar que se agregó a la lista de firmas
+near view $CONTRACT getDocument "{\"hash\":\"$HASHDOC\"}"
+
+# marcar documento como cancelado
+near call $CONTRACT cancelDocument "{\"hash\":\"$HASHDOC\"}" --account-id $CONTRACT
+
+# Eliminar el documento del storage
+near call $CONTRACT deleteDocument "{\"hash\":\"$HASHDOC\"}" --account-id $CONTRACT
+
+# Eliminar el contrato
+BENEFICIARY=aurex.testnet
+near delete $CONTRACT $BENEFICIARY
+
+```
+
 ### Monitorear cuentas
 
 Usa las [NEAR Utilities](https://github.com/near-examples/near-account-utils)
@@ -36,34 +85,13 @@ yarn keys
 yarn storage $CONTRACT
 ```
 
+### Otros
+
 ```bash
-yarn dev-deploy
-export CONTRACT="dev-xxx-xxx" # Generado por el cli, buscar 'Account id: dev-xxx-xxx'
+# Mostrar el estado completo
+near view-state $CONTRACT --finality final
+# "JSON RESULTANTE".forEach(_ => console.log(atob(_.key), atob(_.value)));
 
-# En otra terminal, monitorear storage usando near-account-utils
-watch -d -n 1 yarn storage $CONTRACT
-
-# Documento no encontrado
-near view $CONTRACT getDocument '{"hash":"121234"}'
-
-# Crear documento para firmas.
-# Cada documento requiere 0.1 Near para procesarlo $D
-near call $CONTRACT createDocument \
-  "{\"hash\":\"121234\",\"title\":\"Contrato de arrendamiento\",\"signers\":[\"aurex.testnet\",\"$CONTRACT\"]}" \
-  --account-id $CONTRACT \
-  --amount .1
-
-# Documento Nuevo
-near view $CONTRACT getDocument '{"hash":"121234"}'
-
-# Firmar con mi cuenta en $CONTRACT
-near call $CONTRACT addSign '{"hash":"121234"}' --account-id $CONTRACT
-
-# Verificar que se agregó a la lista de firmas
-near view $CONTRACT getDocument '{"hash":"121234"}'
-
-# Eliminar el documento
-near call $CONTRACT deleteDocument '{"hash":"121234"}' --account-id $CONTRACT
 ```
 
 ## TODO

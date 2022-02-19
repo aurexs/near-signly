@@ -10,6 +10,8 @@
     "dev-deploy": "yarn build:asb:debug && near dev-deploy",
     "clean": "rm -rf ./out && rm -f ./neardev/dev-account*",
     "lint": "eslint '*/**/*.{js,ts}' --quiet --fix",
+    "test": "yarn build:asb:debug && asp",
+    "test2": "yarn build:asb:debug && asp && jest",
     "accounts": "./near-account-utils/bin/accounts-report",
     "keys": "./near-account-utils/bin/keys-report",
     "storage": "./near-account-utils/bin/storage-report",
