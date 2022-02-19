@@ -1,25 +1,26 @@
-import { PersistentMap } from "near-sdk-as";
+import { PersistentMap } from 'near-sdk-as'
 
 @nearBindgen
 export class Document {
-  public hash: string;
-  public title: string;
-  public signers: Array<string>; // Cuentas, separadas por coma
-  private signed: Array<string>; // Cuentas, separadas por coma
+  public hash: string
+  public title: string
+  public signers: Array<string>
+  private signed: Array<string> // Cuentas, separadas por coma
+
   // creator: string; // Ya estará en el Map de documents
-  constructor( hash: string, title: string, signers: Array<string> ) {
-    this.hash = hash;
-    this.title = title;
-    this.signers = signers;
-    this.signed = [];
+  constructor(hash: string, title: string, signers: Array<string>) {
+    this.hash = hash
+    this.title = title
+    this.signers = signers
+    this.signed = []
   }
 
   public addSigner(signer: string): Document {
-    if (! ~this.signers.indexOf(signer)) {
-      throw new Error(`El documento ${this.title} no requiere la firma de ${signer}`);
+    if (!~this.signers.indexOf(signer)) {
+      throw new Error(`El documento ${this.title} no requiere la firma de ${signer}`)
     }
     if (~this.signed.indexOf(signer)) {
-      `La firma de ${signer} ya se encuentra en el documento ${this.title}`
+      throw new Error(`La firma de ${signer} ya se encuentra en el documento ${this.title}`)
     }
 
     this.signed.push(signer)
@@ -32,5 +33,5 @@ export class Document {
   }
 }
 
-export const documents = new PersistentMap<string, Document>("doc:");
-export const creators = new PersistentMap<string, Array<string>>("cre:");
+export const documents = new PersistentMap<string, Document>('doc:')
+export const creators = new PersistentMap<string, Array<string>>('cre:')
