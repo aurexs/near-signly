@@ -1,0 +1,3 @@
+[submodule "near-account-utils"]
+	path = near-account-utils
+	url = https://github.com/near-examples/near-account-utils.git

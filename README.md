@@ -18,9 +18,30 @@ El objetivo de la dApp es desplegar un SmartContract que solicite la firma de ca
 
 ## Comandos útiles
 
+### Monitorear cuentas
+
+Usa las [NEAR Utilities](https://github.com/near-examples/near-account-utils)
+
+```bash
+# Cuentas
+# https://github.com/near-examples/near-account-utils#accounts-report
+yarn accounts
+
+# Claves
+# https://github.com/near-examples/near-account-utils#account-keys-report
+yarn keys
+
+# Storage
+# https://github.com/near-examples/near-account-utils#storage-report
+yarn storage $CONTRACT
+```
+
 ```bash
 yarn dev-deploy
 export CONTRACT="dev-xxx-xxx" # Generado por el cli, buscar 'Account id: dev-xxx-xxx'
+
+# En otra terminal, monitorear storage usando near-account-utils
+watch -d -n 1 yarn storage $CONTRACT
 
 # Documento no encontrado
 near view $CONTRACT getDocument '{"hash":"121234"}'
