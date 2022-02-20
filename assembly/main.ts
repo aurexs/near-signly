@@ -30,7 +30,7 @@ export class Contract {
 
     // Obtiene los primeros 12 caracteres base64 del sha256(documento + cuenta) del creador como ID único
     const creator = context.sender
-    const hash = base64.encode(math.hash('asda' + 'creator')).substr(0, 12)
+    const hash = base64.encode(math.hash(creator + md5)).substr(0, 12)
 
     let creatorDocuments = creatorDocs.get(creator, null)
     if (creatorDocuments) {
@@ -184,6 +184,7 @@ export class Contract {
 
     const doc = documents.getSome(hash)
     doc.cancel()
+    documents.set(hash, doc)
 
     logging.log(`DOC CANCELED: hash[${hash}] owner[${creator}] md5[${doc.md5}] -- ` + this.storageReport())
 

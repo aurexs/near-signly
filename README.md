@@ -85,6 +85,19 @@ yarn keys
 yarn storage $CONTRACT
 ```
 
+### UI
+
+La UI está soportada por Vue + Vite
+
+```bash
+# Lanzar vite en modo desarrollo
+yarn dev
+
+# Compilar dist para productivo
+yarn build-ui
+```
+
+
 ### Otros
 
 ```bash
